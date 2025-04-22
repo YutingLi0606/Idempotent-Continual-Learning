@@ -8,15 +8,15 @@ import torch.nn.functional as F
 import torch.optim as optim
 import copy
 from timm.utils.model_ema import ModelEmaV2
-
+import torch.nn as nn
 from models.utils.continual_model import ContinualModel
 from utils.args import add_management_args, add_experiment_args, add_rehearsal_args, ArgumentParser
-from utils.buffer import Buffer
+from utils.buffer_bfp import Buffer
 from torch.nn import functional as F
 
 from models.utils.continual_model import ContinualModel
 from utils.args import ArgumentParser, add_experiment_args, add_management_args, add_rehearsal_args
-from utils.buffer import Buffer
+
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.pyplot as plt
@@ -39,14 +39,21 @@ class Derloss(ContinualModel):
 
     def __init__(self, backbone, loss, args, transform):
         super(Derloss, self).__init__(backbone, loss, args, transform)
-        self.buffer = Buffer(self.args.buffer_size, self.device)
+        self.buffer = Buffer(self.args.buffer_size, self.device, class_balance = False)
         self.ft=True
-        self.s = 100
+        self.s = backbone.num_classes
         self.c = 0
         self.task=0
+        self.seen_so_far = torch.tensor([]).long().to(self.device)
+        self.seen_to_last_task = torch.tensor([]).long().to(self.device)
+        self.old_model = self.deepcopy_model(self.net)
+        self.first_task=True
+        self.final_d = backbone.final_d
+        #self.bfp_projector = nn.Linear(self.final_d,self.final_d).to(self.device)
+       
 
     def observe(self, inputs, labels, not_aug_inputs):
-
+       
         self.opt.zero_grad()
 
         batch_size, _, H, W = inputs.shape
@@ -57,15 +64,42 @@ class Derloss(ContinualModel):
         x2 = torch.cat([inputs, targets_2 / self.s], dim=1)
         inputs_sum = torch.cat([x1, x2], dim=0)
         labels_sum = torch.cat([labels, labels], dim=0)
-       
+        
+        
+        
+
         self.opt.zero_grad()
+        
+
+       
+ 
 
         #outputs1 = self.net(x1)
     
         #outputs2 = self.net(x2)
         outputs = self.net(inputs_sum)
+        present = labels.unique()
+        
+        self.seen_so_far = torch.cat([self.seen_so_far, present]).unique()
       
         loss = self.loss(outputs, labels_sum)
+
+        
+        logits1 = self.net(x1)
+        predictions = torch.nn.functional.softmax(logits1, dim=1)
+        pred_labels = predictions.argmax(dim=1).to(inputs.device)
+        targets_buf2 = torch.ones(batch_size, 1, H, W).to(inputs.device)
+        targets_buf2 = targets_buf2 * pred_labels.reshape(-1, 1, 1, 1) + 1
+            
+        x_2 = torch.cat([inputs, targets_buf2 / self.s], dim=1)
+        outputs_id=self.net(x_2)
+            
+        loss += self.args.weightb *  F.mse_loss(outputs_id, logits1)
+        
+        if self.first_task:
+            self.net1=self.deepcopy_model(self.net)
+        else:
+            self.net1=self.old_model
 
 
 
@@ -73,45 +107,103 @@ class Derloss(ContinualModel):
       
 
         if not self.buffer.is_empty() :
-            buf_inputs, buf_labels,buf_logits,buf_logits2= self.buffer.get_data(
-                self.args.minibatch_size, transform=self.transform)
+           
+            buf_inputs, buf_labels,task_labels= self.buffer.get_data(
+            self.args.minibatch_size, transform=self.transform)
             B,_,H,W =buf_inputs.shape
 
             
             targetsbuf_1 = self.c * torch.ones(B, 1, H, W).to(inputs.device)
             xbuf1 = torch.cat([buf_inputs, targetsbuf_1 / self.s], dim=1)
-            #buf_outputs1 = self.net(xbuf1)
-            #max_logits = torch.max(buf_logits, buf_logits2)
-           # loss +=  0.6* F.mse_loss(buf_outputs1, buf_logits)
             
-            #loss +=  0.5*F.mse_loss(buf_outputs1, buf_logits2)
             targetsbuf_2 = torch.ones(B, 1, H, W).to(inputs.device)
             targetsbuf_2 = targetsbuf_2 * buf_labels.reshape(-1, 1, 1, 1) + 1
             xbuf2 = torch.cat([buf_inputs, targetsbuf_2 / self.s], dim=1)
             x_bufs= torch.cat([xbuf1, xbuf2], dim=0)
             x_ouputs=self.net(x_bufs)
-            buf_logits_sum=torch.cat([buf_logits, buf_logits2], dim=0)
-            loss +=  0.3* F.mse_loss(buf_logits_sum, x_ouputs)
-           # buf_outputs2 = self.net(xbuf2)
-            #loss +=  0.6* F.mse_loss(buf_outputs2, buf_logits2)
-            #loss +=  0.5*F.mse_loss(buf_outputs2, buf_logits)
+            buf_labels_sum=torch.cat([buf_labels, buf_labels], dim=0)
+            loss +=  self.loss(x_ouputs,buf_labels_sum)
+            #x_ouputs=self.net(xbuf1)
+            #loss +=  self.loss(x_ouputs,buf_labels)
             
-            #xbuf2 = torch.cat([buf_inputs, targetsbuf_2 / self.s], dim=1)
-            #print("logits2")
-            #print(buf_logits2)
-            #predictions = torch.nn.functional.softmax(buf_logits2, dim=1)
-           # pred_labels = predictions.argmax(dim=1).to(inputs.device)
-           # print(pred_labels)
-            #print(F.mse_loss(buf_outputs1, buf_logits2))
-            
-            #loss += 0.3 * F.mse_loss(buf_outputs1, buf_logits)
-            #print("logits1")
-           # print(buf_logits)
-            #predictions = torch.nn.functional.softmax(buf_logits, dim=1)
-            #pred_labels = predictions.argmax(dim=1).to(inputs.device)
-            #print(pred_labels)
-            #print(F.mse_loss(buf_outputs1, buf_logits))
 
+            """
+            targets_buf1 = self.c * torch.ones(B, 1, H, W).to(inputs.device)
+            x_buf1 = torch.cat([buf_inputs, targets_buf1 / self.s], dim=1)
+            x_buf1 = torch.cat([x1, x_buf1], dim=0)
+            buf_logits1 = self.net(x_buf1)
+            predictions = torch.nn.functional.softmax(buf_logits1, dim=1)
+            pred_labels = predictions.argmax(dim=1).to(inputs.device)
+            buf_inputs2 = torch.cat([inputs, buf_inputs], dim=0)
+            B2,_,_,_ =buf_inputs2.shape
+            targets_buf2 = torch.ones(B2, 1, H, W).to(inputs.device)
+            targets_buf2 = targets_buf2 * pred_labels.reshape(-1, 1, 1, 1) + 1
+            
+            x_buf2 = torch.cat([buf_inputs2, targets_buf2 / self.s], dim=1)
+            buf_outputs=self.net(x_buf2)
+            
+            loss += 1 *  F.mse_loss(buf_outputs, buf_logits1)
+            """
+            
+            
+            if self.task > 0 :
+                buf_inputs, buf_labels,task_labels= self.buffer.get_data(
+                self.args.minibatch_size, transform=self.transform)
+                
+                #task_to_remove = self.task
+                #mask = task_labels != task_to_remove
+                #buf_inputs = buf_inputs[mask]
+                #buf_labels = buf_labels[mask]
+                
+                B,_,H,W =buf_inputs.shape
+                
+                targets_buf1 = self.c * torch.ones(B, 1, H, W).to(inputs.device)
+                x_buf1 = torch.cat([buf_inputs, targets_buf1 / self.s], dim=1)
+                buf_logits1 = self.net(x_buf1)
+                predictions = torch.nn.functional.softmax(buf_logits1, dim=1)
+                pred_labels = predictions.argmax(dim=1).to(inputs.device)
+                targets_buf2 = torch.ones(B, 1, H, W).to(inputs.device)
+                targets_buf2 = targets_buf2 * pred_labels.reshape(-1, 1, 1, 1) + 1
+                x_buf2 = torch.cat([buf_inputs, targets_buf2 / self.s], dim=1)
+                buf_outputs=self.net1(x_buf2)
+                #mask_label = torch.zeros_like(buf_logits1)
+                #mask_label[:, self.seen_to_last_task] = 1
+                #buf_outputs = buf_outputs.masked_fill(mask_label == 0, torch.finfo(buf_outputs.dtype).min)
+                #buf_logits1 = buf_logits1.masked_fill(mask_label == 0, torch.finfo(buf_logits1.dtype).min)
+                loss += self.args.weighta *  F.mse_loss(buf_outputs, buf_logits1)
+            
+            
+            
+            
+            
+            
+
+            """
+            if self.task > 0:
+                
+                buf_x, buf_y, buf_tl = self.buffer.get_all_data()
+                task_id = self.task-1
+                mask = buf_tl == task_id
+                buf_x = buf_x[mask]
+                buf_y = buf_y[mask]
+                buf_tl= buf_tl[mask]
+                B,_,H,W =buf_x.shape
+                targets_buf1 = self.c * torch.ones(B, 1, H, W).to(inputs.device)
+                x_buf1 = torch.cat([buf_x, targets_buf1 / self.s], dim=1)
+                buf_logits1 = self.net(x_buf1)
+                predictions = torch.nn.functional.softmax(buf_logits1, dim=1)
+                pred_labels = predictions.argmax(dim=1).to(inputs.device)
+                targets_buf2 = torch.ones(B, 1, H, W).to(inputs.device)
+                targets_buf2 = targets_buf2 * pred_labels.reshape(-1, 1, 1, 1) + 1
+                x_buf2 = torch.cat([buf_x, targets_buf2 / self.s], dim=1)
+                buf_outputs=self.net1(x_buf2)
+                
+                loss +=  0.3 * F.mse_loss(buf_outputs, buf_logits1) 
+            """
+            
+                
+                
+   
             
             
             '''
@@ -158,12 +250,11 @@ class Derloss(ContinualModel):
             loss += 0.5*F.mse_loss(buf_outputs_sum, outputs_buf[:B])
             '''
 
-            
-
+    
         loss.backward()
       
         self.opt.step()
-        self.buffer.add_data(examples=not_aug_inputs, labels=labels[:batch_size],logits=outputs[:batch_size].data,logits2= outputs[batch_size:].data)
+        self.buffer.add_data(examples=not_aug_inputs, labels=labels[:batch_size],task_labels=(torch.ones(self.args.batch_size) *self.task))
 
         return loss.item()
     
@@ -171,11 +262,18 @@ class Derloss(ContinualModel):
         print('\n\n')
         self.task+=1
         print(self.task)
+        self.seen_to_last_task=self.seen_so_far
+        if self.first_task:
+            self.first_task = False
+            self.old_model = self.deepcopy_model(self.net)
+        else:
+            self.old_model = self.deepcopy_model(self.net)
+        """
         self.net.eval()
         features=[]
         labels_sum=[]
         for k, test_loader in enumerate(dataset.test_loaders):
-            if k>1:
+            if k>2:
                 break
             for data in test_loader:
                 with torch.no_grad():
@@ -216,6 +314,7 @@ class Derloss(ContinualModel):
         plt.tight_layout()
         plt.savefig(f'tsne_visualization derloss task:{self.task}.png', dpi=300, bbox_inches='tight')
         plt.close()
+        """
 
 
 
@@ -224,3 +323,8 @@ class Derloss(ContinualModel):
      
         
         print('end_task call')
+    @staticmethod
+    def deepcopy_model(model):
+        model_copy = copy.deepcopy(model)
+        # model_copy.load_state_dict(model.state_dict())
+        return model_copy

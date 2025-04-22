@@ -2,12 +2,20 @@
 # All rights reserved.
 # This source code is licensed under the license found in the
 # LICENSE file in the root directory of this source tree.
-
+import argparse
 from argparse import ArgumentParser
 from datasets import NAMES as DATASET_NAMES
 from models import get_all_models
 
-
+def str2bool(v):
+    if isinstance(v, bool):
+       return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
 def add_experiment_args(parser: ArgumentParser) -> None:
     """
     Adds the arguments used by all the models.

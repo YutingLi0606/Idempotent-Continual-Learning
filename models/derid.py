@@ -10,7 +10,11 @@ from utils.args import add_management_args, add_experiment_args, add_rehearsal_a
 from utils.buffer import Buffer
 # from models.utils.weight_interpolation_mobilenet import *
 from models.utils.hessian_trace import hessian_trace
-
+import matplotlib.pyplot as plt
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.manifold import TSNE
+import torch
 
 def get_parser() -> ArgumentParser:
     parser = ArgumentParser(description='Continual learning via'
@@ -71,6 +75,7 @@ class DERid(ContinualModel):
         outputs = self.net(inputs_sum)
 
         loss = self.loss(outputs, labels)
+        
         
         
        
@@ -269,6 +274,53 @@ class DERid(ContinualModel):
         print('\n\n')
         self.task+=1
         print(self.task)
+        """
+        self.net.eval()
+        features=[]
+        labels_sum=[]
+        for k, test_loader in enumerate(dataset.test_loaders):
+            if k>2:
+                break
+            for data in test_loader:
+                with torch.no_grad():
+                    inputs, labels = data
+                    inputs, labels = inputs.to(self.device), labels.to(self.device)
+                    batch_size, _, H, W = inputs.shape
+                    targets_1 = self.c * torch.ones(batch_size, 1, H, W).to(inputs.device)
+                    x1 = torch.cat([inputs, targets_1 / self.s], dim=1)
+                    outputs = self.net(x1, returnt='features')
+                    features.append(outputs.cpu().numpy()) 
+                    labels_sum.append(labels.cpu().numpy())
+        features = np.concatenate(features)
+        labels_sum = np.concatenate(labels_sum)
+        tsne = TSNE(n_components=2, random_state=42, perplexity=30)
+        features_tsne = tsne.fit_transform(features)
+        print("t-SNE complete!")
+        plt.figure(figsize=(10, 8))
+        class_names = ['airplane', 'automobile', 'bird', 'cat', 'deer',
+               'dog', 'frog', 'horse', 'ship', 'truck']
+        colors = [
+           '#FF0000',  # 红
+           '#00FF00',  # 绿
+           '#0000FF',  # 蓝
+           '#FFD700',  # 金
+           '#FF1493',  # 粉
+           '#00FFFF',  # 青
+           '#FF8C00',  # 橙
+           '#8A2BE2',  # 紫
+           '#32CD32',  # 绿
+           '#FF69B4'   # 粉红
+           ]
+        for i, class_name in enumerate(class_names):
+            idx = labels_sum == i
+            plt.scatter(features_tsne[idx, 0], features_tsne[idx, 1], 
+                       c=[colors[i]], label=class_name, alpha=0.6)
+        plt.title('t-SNE Visualization of CIFAR-10')
+        plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+        plt.tight_layout()
+        plt.savefig(f'tsne_visualization derid task:{self.task}.png', dpi=300, bbox_inches='tight')
+        plt.close()
+        """
 
         print('end_task call')
 

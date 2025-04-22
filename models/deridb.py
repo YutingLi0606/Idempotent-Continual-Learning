@@ -44,6 +44,7 @@ class DERidb(ContinualModel):
         self.ft=True
         self.task=0
         self.nets={}
+        self.args.minibatch_size =500
        
         
     
@@ -65,6 +66,8 @@ class DERidb(ContinualModel):
             self.net1=self.deepcopy_model(self.net)
         else:
             self.net1=self.old_model
+
+        
                           
         if not self.buffer.is_empty() and self.net1 is not None :
             
@@ -82,7 +85,10 @@ class DERidb(ContinualModel):
                 x_buf2 = torch.cat([buf_inputs, targets_buf2 / self.s], dim=1)
                 buf_outputs=self.net1(x_buf2)
                 
-                loss += 0.3*  F.mse_loss(buf_outputs, buf_logits1)
+                loss +=  0.5 * F.mse_loss(buf_outputs, buf_logits1)
+                loss += self.loss(buf_logits1, buf_labels)
+                
+
                            
         loss.backward()
         self.opt.step()

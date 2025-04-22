@@ -98,7 +98,7 @@ class Buffer:
             assert n_tasks is not None
             self.task_number = n_tasks
             self.buffer_portion_size = buffer_size // n_tasks
-        self.attributes = ['examples', 'labels', 'logits', 'logits2','task_labels']
+        self.attributes = ['examples', 'labels', 'logits', 'logits2','task_labels','mses']
 
     def to(self, device):
         self.device = device
@@ -111,7 +111,7 @@ class Buffer:
         return min(self.num_seen_examples, self.buffer_size)
 
     def init_tensors(self, examples: torch.Tensor, labels: torch.Tensor,
-                     logits: torch.Tensor, logits2: torch.Tensor, task_labels: torch.Tensor) -> None:
+                     logits: torch.Tensor, logits2: torch.Tensor, task_labels: torch.Tensor,mses: torch.Tensor) -> None:
         """
         Initializes just the required tensors.
         :param examples: tensor containing the images
@@ -126,7 +126,7 @@ class Buffer:
                 setattr(self, attr_str, torch.zeros((self.buffer_size,
                         *attr.shape[1:]), dtype=typ, device=self.device))
 
-    def add_data(self, examples, labels=None, logits=None, logits2=None,task_labels=None):
+    def add_data(self, examples, labels=None, logits=None, logits2=None,task_labels=None, mses=None):
         """
         Adds the data to the memory buffer according to the reservoir strategy.
         :param examples: tensor containing the images
@@ -136,7 +136,7 @@ class Buffer:
         :return:
         """
         if not hasattr(self, 'examples'):
-            self.init_tensors(examples, labels, logits,logits2, task_labels)
+            self.init_tensors(examples, labels, logits,logits2, task_labels,mses)
 
         for i in range(examples.shape[0]):
             index = reservoir(self.num_seen_examples, self.buffer_size)
@@ -151,6 +151,8 @@ class Buffer:
                     self.logits2[index] = logits2[i].to(self.device)    
                 if task_labels is not None:
                     self.task_labels[index] = task_labels[i].to(self.device)
+                if mses is not None:
+                    self.mses[index] = mses[i].to(self.device)
 
     def get_data(self, size: int, transform: nn.Module = None, return_index=False) -> Tuple:
         """

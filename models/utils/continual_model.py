@@ -31,8 +31,10 @@ class ContinualModel(nn.Module):
         self.loss = loss
         self.args = args
         self.transform = transform
-        self.opt = SGD(self.net.parameters(), lr=self.args.lr)
+        self.opt = SGD(self.net.parameters(), lr=self.args.lr,weight_decay=args.optim_wd, momentum=args.optim_mom)
         self.device = args.device
+        
+        
 
         if not self.NAME or not self.COMPATIBILITY:
             raise NotImplementedError('Please specify the name and the compatibility of the model.')

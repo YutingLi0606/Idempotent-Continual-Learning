@@ -103,6 +103,42 @@ class Erids(ContinualModel):
         selected_labels = labels_all[topk_indices]
         self.buffer.add_data(examples=selected_inputs,
                                  labels=selected_labels)
-                                
+
+"""
+    def end_task(self, dataset):
+        print('\n\n')
+        self.task+=1 
+        self.build_buffer(dataset, self.task)
+    def build_buffer(self, dataset, task):
+        examples_per_task = self.buffer.buffer_size // task
+
+        if task > 1:
+            # shrink buffer
+            buf_x, buf_y, buf_tl = self.buffer.get_all_data()
+            self.buffer.empty()
+
+            for ttl in buf_tl.unique():
+                idx = (buf_tl == ttl)
+                ex, lab, tasklab = buf_x[idx], buf_y[idx], buf_tl[idx]
+                first = min(ex.shape[0], examples_per_task)
+                self.buffer.add_data(
+                    examples=ex[:first],
+                    labels=lab[:first],
+                    task_labels=tasklab[:first]
+                )
+
+        counter = 0
+        with torch.no_grad():
+            for i, data in enumerate(dataset.train_loader):
+                _, labels, not_aug_inputs = data
+                not_aug_inputs = not_aug_inputs.to(self.device)
+                if examples_per_task - counter > 0:
+
+                    self.buffer.add_data(examples=not_aug_inputs[:(examples_per_task - counter)],
+                                         labels=labels[:(examples_per_task - counter)],
+                                         task_labels=(torch.ones(self.args.batch_size) *
+                                                      (task - 1))[:(examples_per_task - counter)])
+                    counter += len(not_aug_inputs)  
+    """      
     
 

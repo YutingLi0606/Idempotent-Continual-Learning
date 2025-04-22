@@ -10,9 +10,10 @@ import torch.optim
 import torchvision.transforms as transforms
 from backbone.ResNet18 import resnet18
 from backbone.ResNet18_id import resnet18_id
+from backbone.ResNet18_id2 import resnet18_id2
 from PIL import Image
 from torchvision.datasets import CIFAR100
-
+import torch.nn as nn
 from datasets.transforms.denormalization import DeNormalize
 from datasets.utils.continual_dataset import (ContinualDataset,
                                               store_masked_loaders)
@@ -82,7 +83,7 @@ class SequentialCIFAR100(ContinualDataset):
                               (0.2675, 0.2565, 0.2761))])
 
     def get_examples_number(self):
-        train_dataset = MyCIFAR100(base_path() + 'CIFAR10', train=True,
+        train_dataset = MyCIFAR100(base_path() + 'CIFAR100', train=True,
                                    download=True)
         return len(train_dataset.data)
 
@@ -119,6 +120,9 @@ class SequentialCIFAR100(ContinualDataset):
 
     def get_backbone2(self):
         return resnet18_id(SequentialCIFAR100.N_CLASSES_PER_TASK * SequentialCIFAR100.N_TASKS, nf=int(64*self.args.resnet_width))
+    
+    def get_backbone3(self):
+        return resnet18_id2(SequentialCIFAR100.N_CLASSES_PER_TASK * SequentialCIFAR100.N_TASKS, nf=int(64*self.args.resnet_width))
     @staticmethod
     def get_loss():
         return F.cross_entropy
@@ -139,6 +143,8 @@ class SequentialCIFAR100(ContinualDataset):
     def get_epochs():
         return 50
 
+    def get_projector(self):
+        return nn.Linear(8*int(64*self.args.resnet_width) , 8*int(64*self.args.resnet_width))
     @staticmethod
     def get_batch_size():
         return 32

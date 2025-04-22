@@ -83,6 +83,7 @@ class ResNet(MammothBackbone):
         self.block = block
         self.num_classes = num_classes
         self.nf = nf
+        self.final_d = nf * 8
         self.conv1 = conv3x3(3, nf * 1)
         self.bn1 = nn.BatchNorm2d(nf * 1)
         self.layer1 = self._make_layer(block, nf * 1, num_blocks[0], stride=1)
@@ -90,6 +91,8 @@ class ResNet(MammothBackbone):
         self.layer3 = self._make_layer(block, nf * 4, num_blocks[2], stride=2)
         self.layer4 = self._make_layer(block, nf * 8, num_blocks[3], stride=2)
         self.linear = nn.Linear(nf * 8 * block.expansion, num_classes)
+        self.net_channels = [nf * 1, nf * 2, nf * 4, nf * 8]
+        #self.projector = nn.Linear(nf * 8 , nf * 8)
 
         self._features = nn.Sequential(self.conv1,
                                        self.bn1,
@@ -147,6 +150,30 @@ class ResNet(MammothBackbone):
             return (out, feature)
 
         raise NotImplementedError("Unknown return type")
+    def forward_all_layers(self, x: torch.Tensor) -> torch.Tensor:
+        feats = []
+        
+        out = relu(self.bn1(self.conv1(x))) # 64, 32, 32
+        if hasattr(self, 'maxpool'):
+            out = self.maxpool(out)
+        out = self.layer1(out)  # -> 64, 32, 32
+        feats.append(out)
+
+        out = self.layer2(out)  # -> 128, 16, 16
+        feats.append(out)
+
+        out = self.layer3(out)  # -> 256, 8, 8
+        feats.append(out)
+
+        out = self.layer4(out)  # -> 512, 4, 4
+        feats.append(out)
+
+        out = avg_pool2d(out, out.shape[2]) # -> 512, 1, 1
+        feature = out.view(out.size(0), -1)  # 512
+        
+        out = self.classifier(feature)
+
+        return out, feats
 
 
 def resnet18(nclasses: int, nf: int=64) -> ResNet:

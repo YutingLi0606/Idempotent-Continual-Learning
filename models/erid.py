@@ -27,7 +27,7 @@ class Erid(ContinualModel):
         super(Erid, self).__init__(backbone, loss, args, transform)
         self.buffer = Buffer(self.args.buffer_size, self.device)
         self.c=0
-        self.s=10
+        self.s=backbone.num_classes
 
     def observe(self, inputs, labels, not_aug_inputs):
 
@@ -50,6 +50,16 @@ class Erid(ContinualModel):
 
         outputs = self.net(inputs_sum)
         loss = self.loss(outputs, labels_sum)
+        output_1=self.net(x1)
+        output_2=self.net(x2)
+        if torch.equal(output_1, outputs[:batch_size,:]):
+            print("wrong")
+            print(output_1)
+            print(outputs[:batch_size,:])
+        if torch.equal(output_2, outputs[batch_size:,:]):
+            print("wrong")
+            print(output_2)
+            print(outputs[batch_size:,:])
         loss.backward()
         self.opt.step()
 

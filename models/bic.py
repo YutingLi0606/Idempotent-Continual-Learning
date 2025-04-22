@@ -177,6 +177,7 @@ class BiC(ContinualModel):
                 _, labels, not_aug_inputs = data
                 not_aug_inputs = not_aug_inputs.to(self.device)
                 if examples_per_task - counter > 0:
+
                     self.buffer.add_data(examples=not_aug_inputs[:(examples_per_task - counter)],
                                          labels=labels[:(examples_per_task - counter)],
                                          task_labels=(torch.ones(self.args.batch_size) *

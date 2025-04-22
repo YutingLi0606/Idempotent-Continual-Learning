@@ -1,7 +1,7 @@
 import copy
 import math
 import torch
-import wandb
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -9,19 +9,19 @@ import torch.nn as nn
 from torch.optim import SGD, Adam
 from torch.nn import functional as F
 
-from utils.buffer import Buffer
+from utils.buffer_bfp import Buffer
 from models.utils.continual_model import ContinualModel
 from backbone.MNISTMLP import MNISTMLP
 from utils.args import *
-#from utils.lowrank_reg import LowRankReg
-#rom utils.routines import forward_loader_all_layers
+from utils.lowrank_reg import LowRankReg
+from utils.routines import forward_loader_all_layers
 
 
 from .utils import *
 #from .projector_manager import ProjectorManager
 def add_parser(parser):
-	parser.add_argument('--alpha_bfp', type=float, required=True,
-				help="Weight of the backward feature projection loss. It can be overridden by the 'alpha_bfpX' below")
+	#parser.add_argument('--alpha_bfp', type=float, default=1,
+	#			help="Weight of the backward feature projection loss. It can be overridden by the 'alpha_bfpX' below")
 	parser.add_argument('--alpha_bfp1', type=float, default=None)
 	parser.add_argument('--alpha_bfp2', type=float, default=None)
 	parser.add_argument('--alpha_bfp3', type=float, default=None)
@@ -45,11 +45,12 @@ def add_parser(parser):
 
 	parser.add_argument('--proj_type', type=str, default="1", choices=['0', '1', '2', '0p+1'],
 				help="Type of the backward feature projection. (number of layers in MLP projector)")
-	parser.add_argument('--final_feat', action='store_true',
+	parser.add_argument('--final_feat', action='store_true',default=True,
 				help="If true, bfp loss will only be applied to the last feature map.")
 	parser.add_argument('--pool_dim', default='hw', type=str, choices=['h', 'w', 'c', 'hw', 'flatten'], 
 				help="Pooling before computing BFP loss. If None, no pooling is applied.")			
-	
+	parser.add_argument("--class_balance", type=str2bool, default=True,
+                        help="If set, the memory buffer will be balanced by class")
 	return parser
 def get_parser() -> ArgumentParser:
 	parser = ArgumentParser(description='Continual learning via backward feature projection')
@@ -85,10 +86,118 @@ def get_parser() -> ArgumentParser:
 
 	parser.add_argument("--no_resample", action="store_true",
 				help="If set, the replayed data will not be resampled for each loss.")
+    
 				
 	parser = add_parser(parser)
 	
 	return parser
+
+BEST_ARGS_DERPP = {
+	'seq-cifar10': {
+		200: {"lr": 0.03, "minibatch_size": 32, "batch_size": 32, "alpha_distill": 0.1, 
+			"alpha_ce": 0.5, "n_epochs": 50},
+		500: {"lr": 0.03, "minibatch_size": 32, "batch_size": 32, "alpha_distill": 0.2, 
+			"alpha_ce": 0.5, "n_epochs": 50},
+	},
+	'seq-cifar100': {
+		500: {"lr": 0.03, "minibatch_size": 32, "batch_size": 32, "alpha_distill": 0.1, 
+			"alpha_ce": 0.5, "n_epochs": 50},
+		2000: {"lr": 0.03, "minibatch_size": 32, "batch_size": 32, "alpha_distill": 0.1, 
+			"alpha_ce": 0.5, "n_epochs": 50},
+	},
+	'seq-tinyimg': {
+		4000: {"lr": 0.1, "minibatch_size": 64, "batch_size": 64, "alpha_distill": 0.3, 
+			"alpha_ce": 0.8, "n_epochs": 100},
+	},
+}
+
+BEST_ARGS_ER = {
+	'seq-cifar10': {
+		200: {"lr": 0.1, "minibatch_size": 32, "batch_size": 32, "alpha_distill": 0, 
+			"alpha_ce": 1.0, "n_epochs": 50},
+		500: {"lr": 0.1, "minibatch_size": 32, "batch_size": 32, "alpha_distill": 0, 
+			"alpha_ce": 1.0, "n_epochs": 50},
+	},
+	'seq-cifar100': {
+		500: {"lr": 0.1, "minibatch_size": 32, "batch_size": 32, "alpha_distill": 0, 
+			"alpha_ce": 1.0, "n_epochs": 50},
+		2000: {"lr": 0.1, "minibatch_size": 32, "batch_size": 32, "alpha_distill": 0, 
+			"alpha_ce": 1.0, "n_epochs": 50},
+	},
+	'seq-tinyimg': {
+		4000: {"lr": 0.1, "minibatch_size": 64, "batch_size": 64, "alpha_distill": 0, 
+			"alpha_ce": 1.0, "n_epochs": 100},
+	},
+}
+
+BEST_ARGS = {
+	'derpp': BEST_ARGS_DERPP,
+	'er': BEST_ARGS_ER,
+}
+
+def set_best_args(args):
+	# Set the best arguments if not given otherwise
+	try:
+		best_args = BEST_ARGS[args.base_method][args.dataset][args.buffer_size]
+		for k, v in best_args.items():
+			if getattr(args, k) is None:
+				print("Setting {} to {}".format(k, v))
+				setattr(args, k, v)
+	except KeyError:
+		print("No best arguments found for base_method {} dataset {} and buffer size {}."
+			.format(args.base_method, args.dataset, args.buffer_size))
+def pool_feat(f1, f2, pool_dim, normalize_feat=False):
+    assert f1.shape == f2.shape, (f1.shape, f2.shape) # (N, C, H, W)
+
+    # If already pooled, return the original features
+    if f1.ndim == 2:
+        return f1, f2
+    
+    # Do the pooling and move the channel dim to the last
+    if pool_dim == 'hw':
+        f1 = f1.mean(dim=(2, 3)) # (N, C)
+        f2 = f2.mean(dim=(2, 3)) # (N, C)
+    elif pool_dim == 'c':
+        f1 = f1.mean(dim=1).reshape(f1.shape[0], -1) # (N, H*W)
+        f2 = f2.mean(dim=1).reshape(f2.shape[0], -1) # (N, H*W)
+    elif pool_dim == 'h':
+        f1 = f1.mean(dim=2).reshape(f1.shape[0], -1) # (N, C*W)
+        f2 = f2.mean(dim=2).reshape(f2.shape[0], -1) # (N, C*W)
+    elif pool_dim == 'w':
+        f1 = f1.mean(dim=3).reshape(f1.shape[0], -1) # (N, C*H)
+        f2 = f2.mean(dim=3).reshape(f2.shape[0], -1) # (N, C*H)
+    elif pool_dim == 'flatten':
+        f1 = f1.transpose(1, 3) # (N, W, H, C)
+        f2 = f2.transpose(1, 3) # (N, W, H, C)
+    else:
+        raise ValueError("Unknown pooling dimension: {}".format(pool_dim))
+        
+    # Treat each example as an unit
+    f1 = f1.reshape(f1.shape[0], -1) # (N, -1)
+    f2 = f2.reshape(f2.shape[0], -1) # (N, -1)
+    
+    # Normalize features if needed
+    if normalize_feat:
+        f1 = F.normalize(f1, p=2, dim=1)
+        f2 = F.normalize(f2, p=2, dim=1)
+
+    return f1, f2
+
+def match_loss(f1, f2, loss_type):
+    # Compute the loss according to the loss type
+    if loss_type == 'mse':
+        loss = F.mse_loss(f1, f2)
+    elif loss_type == 'rmse':
+        loss = F.mse_loss(f1, f2) ** 0.5
+    elif loss_type == 'mfro':
+        # Mean of Frobenius norm, normalized by the number of elements
+        loss = torch.mean(torch.frobenius_norm(f1 - f2, dim=-1)) / (float(f1.shape[-1]) ** 0.5)
+    elif loss_type == "cos":
+        loss = 1 - F.cosine_similarity(f1, f2, dim=1).mean()
+    else:
+        raise ValueError("Unknown loss type: {}".format(loss_type))
+
+    return loss
 class ProjectorManager(nn.Module):
 	'''
 	Helper class managing the projection layers for BFP
@@ -108,7 +217,7 @@ class ProjectorManager(nn.Module):
 		if self.args.alpha_bfp4 is not None: self.alpha_bfp_list[3] = self.args.alpha_bfp4
 		self.bfp_flag = sum(self.alpha_bfp_list) > 0
 		
-		self.reset_proj()
+		#self.reset_proj()
 		
 		# Get the list of layers where BFP is applied
 		if self.args.final_feat:
@@ -207,12 +316,14 @@ class Bfp(ContinualModel):
 
     def __init__(self, backbone, loss, args, transform):
         
-
+        
         # Then call the super constructor
         super(Bfp, self).__init__(backbone, loss, args, transform)
         self.old_net = None
         self.task_id=0
-        self.buffer = Buffer(self.args.buffer_size, self.device, class_balance = self.args.class_balance)
+        self.s = 0
+        self.buffer = Buffer(self.args.buffer_size, self.device, class_balance = False)
+		#self.args.class_balance
 
         # if resnet_skip_relu, modify the backbone to skip relu at the end of each major block
         if self.args.resnet_skip_relu:
@@ -233,9 +344,11 @@ class Bfp(ContinualModel):
         self.projector_manager = ProjectorManager(self.args, self.net.net_channels, self.device)
 
     def begin_task(self, dataset):
+        self.s = dataset.N_CLASSES_PER_TASK
         self.projector_manager.begin_task(dataset)
 
     def observe(self, inputs, labels, not_aug_inputs):
+        self.opt.zero_grad()
         # Regular CE loss on the online data
         outputs, feats = self.net.forward_all_layers(inputs)
         ce_loss = self.loss(outputs, labels)
@@ -255,6 +368,7 @@ class Bfp(ContinualModel):
 
         if not self.buffer.is_empty():
             '''Distill loss on the replayed images'''
+            
             if self.args.alpha_distill > 0:
                 if self.args.no_resample and "buf_inputs" in locals(): pass # No need to resample
                 else: buf_inputs, buf_labels, buf_logits, buf_task_labels, buf_feats, buf_logits_new_net, buf_feats_new_net = sample_buffer_and_forward()
@@ -264,7 +378,7 @@ class Bfp(ContinualModel):
                         buf_logits = self.old_net(buf_inputs)
                         
                 logits_distill_loss = self.args.alpha_distill * F.mse_loss(buf_logits_new_net, buf_logits)
-
+            
             '''CE loss on the replayed images'''
             if self.args.alpha_ce > 0:
                 if self.args.no_resample and "buf_inputs" in locals(): pass # No need to resample
@@ -274,6 +388,7 @@ class Bfp(ContinualModel):
 
             '''Backward feature projection loss'''
             if self.old_net is not None and self.projector_manager.bfp_flag:
+                print("Use BFP!")
                 if not self.args.new_only:
                     buf_inputs, buf_labels, buf_logits, buf_task_labels, buf_feats, buf_logits_new_net, buf_feats_new_net = sample_buffer_and_forward()
 
@@ -291,7 +406,7 @@ class Bfp(ContinualModel):
                         labels_comb = labels
                         feats_comb = feats
                     elif self.args.old_only:
-                        mask_old = buf_labels < self.task_id * self.args.N_CLASSES_PER_TASK
+                        mask_old = buf_labels < self.task_id * self.s
                         inputs_comb = buf_inputs[mask_old]
                         labels_comb = buf_labels[mask_old]
                         feats_comb = [f[mask_old] for f in  buf_feats_new_net]
@@ -300,8 +415,8 @@ class Bfp(ContinualModel):
                         labels_comb = torch.cat((labels, buf_labels), dim=0)
                         feats_comb = [torch.cat((f, bf), dim=0) for f, bf in zip(feats, buf_feats_new_net)]
 
-                    mask_old = labels_comb < self.task_id * self.args.N_CLASSES_PER_TASK
-                    mask_new = labels_comb >= self.task_id * self.args.N_CLASSES_PER_TASK
+                    mask_old = labels_comb < self.task_id * self.s
+                    mask_new = labels_comb >= self.task_id * self.s
 
                     # Forward data through the old network to get the old features
                     with torch.no_grad():
@@ -312,8 +427,9 @@ class Bfp(ContinualModel):
                     feats_comb, feats_old, mask_new, mask_old)
                 
         loss = ce_loss + logits_distill_loss + replay_ce_loss + bfp_loss_all
-
-        self.opt.zero_grad()
+        #loss = ce_loss  + replay_ce_loss + bfp_loss_all
+        #loss = ce_loss + logits_distill_loss + replay_ce_loss 
+        #self.opt.zero_grad()
         self.projector_manager.before_backward()
 
         loss.backward()
@@ -336,17 +452,7 @@ class Bfp(ContinualModel):
                                 logits=outputs.data, 
                                 task_labels=task_labels)
 
-        log_dict = {
-            "train/loss": loss, 
-            "train/ce_loss": ce_loss, 
-            "train/logits_distill_loss": logits_distill_loss,
-            "train/replay_ce_loss": replay_ce_loss,
-            "train/bfp_loss_all": bfp_loss_all,
-        }
-        if bfp_loss_dict is not None:
-            for k, v in bfp_loss_dict.items(): log_dict.update({"train/" + k: v})
-        wandb.log(log_dict)
-
+        
         return loss.item()
 
     def end_task(self, dataset):

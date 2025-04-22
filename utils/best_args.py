@@ -651,6 +651,21 @@ best_args = {
                                    'alpha': 0.3,
                                    'batch_size': 32,
                                    'n_epochs': 50}},
+                    'derid': {200: {'lr': 0.03,
+                                  'minibatch_size': 32,
+                                  'alpha': 0.3,
+                                  'batch_size': 32,
+                                  'n_epochs': 50},
+                            500: {'lr': 0.03,
+                                  'minibatch_size': 32,
+                                  'alpha': 0.3,
+                                  'batch_size': 32,
+                                  'n_epochs': 50},
+                            5120: {'lr': 0.03,
+                                   'minibatch_size': 32,
+                                   'alpha': 0.3,
+                                   'batch_size': 32,
+                                   'n_epochs': 50}},
                     'derloss': {200: {'lr': 0.03,
                                   'minibatch_size': 32,
                                   'alpha': 0.3,
@@ -713,7 +728,27 @@ best_args = {
                                  'minibatch_size': 32,
                                  'batch_size': 32,
                                  'n_epochs': 50},
+                           4000: {'lr': 0.1,
+                                 'minibatch_size': 32,
+                                 'batch_size': 32,
+                                 'n_epochs': 50},
                            5120: {'lr': 0.1,
+                                  'minibatch_size': 32,
+                                  'batch_size': 32,
+                                  'n_epochs': 50}},
+                     'er_ace': {200: {'lr': 0.1,
+                                 'minibatch_size': 32,
+                                 'batch_size': 32,
+                                 'n_epochs': 50},
+                           500: {'lr': 0.03,
+                                 'minibatch_size': 32,
+                                 'batch_size': 32,
+                                 'n_epochs': 50},
+                           4000: {'lr': 0.03,
+                                 'minibatch_size': 32,
+                                 'batch_size': 32,
+                                 'n_epochs': 50},
+                           5120: {'lr': 0.03,
                                   'minibatch_size': 32,
                                   'batch_size': 32,
                                   'n_epochs': 50}},
@@ -722,6 +757,10 @@ best_args = {
                                  'batch_size': 32,
                                  'n_epochs': 50},
                            500: {'lr': 0.03,
+                                 'minibatch_size': 32,
+                                 'batch_size': 32,
+                                 'n_epochs': 50},
+                           4000: {'lr': 0.1,
                                  'minibatch_size': 32,
                                  'batch_size': 32,
                                  'n_epochs': 50},
@@ -765,6 +804,12 @@ best_args = {
                                     'optim_wd': 0.00001,
                                     'batch_size': 32,
                                     'n_epochs': 50},
+                              4000: {'lr': 0.03,
+                                    'minibatch_size': 32,
+                                    # 'softmax_temp': 2.0,
+                                    'optim_wd': 0.00001,
+                                    'batch_size': 32,
+                                    'n_epochs': 50},
                               5120: {'lr': 0.03,
                                      'minibatch_size': 32,
                                      #  'softmax_temp': 2.0,
@@ -779,6 +824,11 @@ best_args = {
                             500: {'lr': 0.03,
                                   'minibatch_size': 32,
                                   'alpha': 1,
+                                  'batch_size': 32,
+                                  'n_epochs': 50},
+                            4000: {'lr': 0.03,
+                                  'minibatch_size': 32,
+                                  'alpha': 0.3,
                                   'batch_size': 32,
                                   'n_epochs': 50},
                             5120: {'lr': 0.03,
@@ -797,6 +847,32 @@ best_args = {
                                   'alpha': 0.1,
                                   'batch_size': 32,
                                   'n_epochs': 50},
+                            4000: {'lr': 0.03,
+                                   'minibatch_size': 32,
+                                   'alpha': 0.1,
+                                   'batch_size': 32,
+                                   'n_epochs': 50},
+                            5120: {'lr': 0.03,
+                                   'minibatch_size': 32,
+                                   'alpha': 0.1,
+                                   'batch_size': 32,
+                                   'n_epochs': 50}},
+                    'derloss': {200: {'lr': 0.03,
+                                  'minibatch_size': 32,
+                                  'softmax_temp': 2.0,
+                                  'alpha': 0.1,
+                                  'batch_size': 32,
+                                  'n_epochs': 50},
+                            500: {'lr': 0.03,
+                                  'minibatch_size': 32,
+                                  'alpha': 0.1,
+                                  'batch_size': 32,
+                                  'n_epochs': 50},
+                            4000: {'lr': 0.03,
+                                   'minibatch_size': 32,
+                                   'alpha': 0.1,
+                                   'batch_size': 32,
+                                   'n_epochs': 50},
                             5120: {'lr': 0.03,
                                    'minibatch_size': 32,
                                    'alpha': 0.1,
@@ -813,6 +889,11 @@ best_args = {
                                   'alpha': 0.1,
                                   'batch_size': 32,
                                   'n_epochs': 50},
+                            4000: {'lr': 0.03,
+                                   'minibatch_size': 32,
+                                   'alpha': 0.1,
+                                   'batch_size': 32,
+                                   'n_epochs': 50},
                             5120: {'lr': 0.03,
                                    'minibatch_size': 32,
                                    'alpha': 0.1,
@@ -828,6 +909,12 @@ best_args = {
                                     'minibatch_size': 32,
                                     'alpha': 0.2,
                                     'beta': 0.5,
+                                    'batch_size': 32,
+                                    'n_epochs': 50},
+                              4000: {'lr': 0.1,
+                                    'minibatch_size': 32,
+                                    'alpha': 0.3,
+                                    'beta': 0.8,
                                     'batch_size': 32,
                                     'n_epochs': 50},
                               5120: {'lr': 0.03,
@@ -903,6 +990,38 @@ best_args = {
             500: {'lr': 0.1, 'optim_mom': 0, 'optim_wd': 0},
             2000: {'lr': 0.1, 'optim_mom': 0, 'optim_wd': 0}
         },
+         'bfp': {
+            500: {"lr": 0.03,  "alpha_distill": 0.1, 'optim_mom': 0, 'optim_wd': 0,
+			"alpha_ce": 0.5},
+		2000: {"lr": 0.03,  "alpha_distill": 0.1, 'optim_mom': 0, 'optim_wd': 0,
+			"alpha_ce": 0.5}
+        },
+        'idempotent': {
+            500: {"lr": 0.03,   'optim_mom': 0, 'optim_wd': 0},
+		2000: {"lr": 0.03,  'optim_mom': 0, 'optim_wd': 0}
+        },
+         'idempotent2': {
+            500: {"lr": 0.03,   'optim_mom': 0, 'optim_wd': 0},
+		2000: {"lr": 0.03,  'optim_mom': 0, 'optim_wd': 0}
+        },
+        'bfpid': {
+            500: {"lr": 0.03,  "alpha_distill": 0.1, 'optim_mom': 0, 'optim_wd': 0,
+			"alpha_ce": 0.5},
+		2000: {"lr": 0.03,  "alpha_distill": 0.1, 'optim_mom': 0, 'optim_wd': 0,
+			"alpha_ce": 0.5}
+        },
+        'erl': {
+            500: {'lr': 0.1, 'optim_mom': 0, 'optim_wd': 0},
+            2000: {'lr': 0.1, 'optim_mom': 0, 'optim_wd': 0}
+        },
+         'erids': {
+            500: {'lr': 0.1, 'optim_mom': 0, 'optim_wd': 0},
+            2000: {'lr': 0.1, 'optim_mom': 0, 'optim_wd': 0}
+        },
+        'erid': {
+            500: {'lr': 0.1, 'optim_mom': 0, 'optim_wd': 0},
+            2000: {'lr': 0.1, 'optim_mom': 0, 'optim_wd': 0}
+        },
         'gdumb': {
             500:  {'lr': 0.1, 'maxlr': 0.05, 'minlr': 5e-4, 'cutmix_alpha': 1, 'fitting_epochs': 250, 'optim_mom': 0.9, 'optim_wd': 1e-6},
             2000: {'lr': 0.1, 'maxlr': 0.05, 'minlr': 5e-4, 'cutmix_alpha': 1, 'fitting_epochs': 250, 'optim_mom': 0, 'optim_wd': 1e-6},
@@ -914,6 +1033,10 @@ best_args = {
 
 
         'icarl': {
+            500: {'lr': 0.3, 'optim_mom': 0, 'optim_wd': 1e-05},
+            2000: {'lr': 0.3, 'optim_mom': 0, 'optim_wd': 1e-05}
+        },
+        'icarlid': {
             500: {'lr': 0.3, 'optim_mom': 0, 'optim_wd': 1e-05},
             2000: {'lr': 0.3, 'optim_mom': 0, 'optim_wd': 1e-05}
         },
@@ -930,6 +1053,11 @@ best_args = {
             500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0},
             2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0}
         },
+
+         'er_aceid': {
+            500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0},
+            2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0}
+        },
         'rpc': {
             500: {'lr': 0.1, 'optim_mom': 0, 'optim_wd': 0},
             2000: {'lr': 0.1, 'optim_mom': 0, 'optim_wd': 0}
@@ -942,6 +1070,14 @@ best_args = {
              500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3},
             2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3}
         },
+        'deridb': {
+             500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3},
+            2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3}
+        },
+        'deridb2': {
+             500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3},
+            2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3}
+        },
         'derpp': {
             500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.1, 'beta': 0.5},
             2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.1, 'beta': 0.5}
@@ -951,6 +1087,26 @@ best_args = {
             2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.1, 'beta': 0.5}
         },
         'derloss': {
+             500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3},
+            2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3}
+        },
+        'derlossm': {
+             500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3},
+            2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3}
+        },
+         'derlossema': {
+             500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3},
+            2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3}
+        },
+        'derlossb': {
+             500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3},
+            2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3}
+        },
+          'derlossh': {
+             500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3},
+            2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3}
+        },
+         'derloss2': {
              500: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3},
             2000: {'lr': 0.03, 'optim_mom': 0, 'optim_wd': 0, 'alpha': 0.3}
         },

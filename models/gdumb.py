@@ -52,7 +52,7 @@ def fit_buffer(self, epochs):
             all_inputs, all_labels = all_inputs[self.args.batch_size:], all_labels[self.args.batch_size:]
 
             if self.args.cutmix_alpha is not None:
-                inputs, labels_a, labels_b, lam = cutmix_data(x=buf_inputs.cpu(), y=buf_labels.cpu(), alpha=self.args.cutmix_alpha)
+                inputs, labels_a, labels_b, lam = cutmix_data(x=buf_inputs.cpu(), y=buf_labels.cpu(), alpha=self.args.cutmix_alpha,device=self.device)
                 buf_inputs = inputs.to(self.device)
                 buf_labels_a = labels_a.to(self.device)
                 buf_labels_b = labels_b.to(self.device)

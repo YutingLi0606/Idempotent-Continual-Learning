@@ -45,7 +45,6 @@ class DERidb2(ContinualModel):
         self.ft=True
         self.task=0
         self.nets={}
-        self.args.minibatch_size =500
        
         
     
@@ -73,21 +72,35 @@ class DERidb2(ContinualModel):
         if not self.buffer.is_empty() and self.net1 is not None :
             
             if  not self.first_task:
+                """
                 buf_inputs,buf_labels,_ = self.buffer.get_data(
                 self.args.minibatch_size, transform=self.transform)
                 B,_,H,W =buf_inputs.shape
                 targets_buf1 = self.c * torch.ones(B, 1, H, W).to(inputs.device)
                 x_buf1 = torch.cat([buf_inputs, targets_buf1 / self.s], dim=1)
+                buf_logits = self.net(x_buf1)
+                loss += self.loss(buf_logits, buf_labels)
+                """
+                #idempotent loss
+                buf_x, buf_y, buf_tl = self.buffer.get_all_data()
+                task_id = self.task-1
+                mask = buf_tl == task_id
+                buf_x = buf_x[mask]
+                buf_y = buf_y[mask]
+                buf_tl= buf_tl[mask]
+                B,_,H,W =buf_x.shape
+                targets_buf1 = self.c * torch.ones(B, 1, H, W).to(inputs.device)
+                x_buf1 = torch.cat([buf_x, targets_buf1 / self.s], dim=1)
                 buf_logits1 = self.net(x_buf1)
                 predictions = torch.nn.functional.softmax(buf_logits1, dim=1)
                 pred_labels = predictions.argmax(dim=1).to(inputs.device)
                 targets_buf2 = torch.ones(B, 1, H, W).to(inputs.device)
                 targets_buf2 = targets_buf2 * pred_labels.reshape(-1, 1, 1, 1) + 1
-                x_buf2 = torch.cat([buf_inputs, targets_buf2 / self.s], dim=1)
+                x_buf2 = torch.cat([buf_x, targets_buf2 / self.s], dim=1)
                 buf_outputs=self.net1(x_buf2)
                 
-                loss +=  0.5 * F.mse_loss(buf_outputs, buf_logits1)
-                loss += self.loss(buf_logits1, buf_labels)
+                loss +=  0.3 * F.mse_loss(buf_outputs, buf_logits1)
+                
                 
 
                            
@@ -101,6 +114,7 @@ class DERidb2(ContinualModel):
         print('\n\n')
         self.task+=1
         print(self.task)
+        self.build_buffer(dataset, self.task)
        
         print('end_task call')
 
@@ -108,48 +122,40 @@ class DERidb2(ContinualModel):
         if self.first_task:
             self.first_task = False
             self.old_model = self.deepcopy_model(self.net)
+        else:
+            self.old_model = self.deepcopy_model(self.net)
+        
+           
+            
+    def build_buffer(self, dataset, task):
+        examples_per_task = self.buffer.buffer_size // task
+
+        if task > 1:
+            # shrink buffer
+            buf_x, buf_y, buf_tl = self.buffer.get_all_data()
+            self.buffer.empty()
+
+            for ttl in buf_tl.unique():
+                idx = (buf_tl == ttl)
+                ex, lab, tasklab = buf_x[idx], buf_y[idx], buf_tl[idx]
+                first = min(ex.shape[0], examples_per_task)
+                self.buffer.add_data(
+                    examples=ex[:first],
+                    labels=lab[:first],
+                    task_labels=tasklab[:first]
+                )
+
+        counter = 0
+        with torch.no_grad():
             for i, data in enumerate(dataset.train_loader):
                 _, labels, not_aug_inputs = data
                 not_aug_inputs = not_aug_inputs.to(self.device)
-                self.buffer.add_data(examples=not_aug_inputs,labels=labels,task_labels=(torch.ones(self.args.batch_size) *self.task))
-          
+                if examples_per_task - counter > 0:
 
-        else:
-            self.old_model = self.deepcopy_model(self.net)
-            if self.task==2:
-                buf_x, buf_y, buf_tl = self.buffer.get_all_data()
-                self.buffer.empty()
-                examples_per_task = self.buffer.buffer_size // 2
-                self.buffer.add_data(
-                    examples=buf_x[:examples_per_task],
-                    labels=buf_y[:examples_per_task],
-                    task_labels=buf_tl[:examples_per_task]
-                )
-            
-            if self.task>2:
-                buf_x, buf_y, buf_tl = self.buffer.get_all_data()
-                self.buffer.empty()
-                examples_per_task = self.buffer.buffer_size // 2
-                task_to_remove = self.task-2
-                mask = buf_tl != task_to_remove
-                buf_x = buf_x[mask]
-                buf_y = buf_y[mask]
-                buf_tl= buf_tl[mask]
-                self.buffer.add_data(
-                    examples=buf_x[:examples_per_task],
-                    labels=buf_y[:examples_per_task],
-                    task_labels=buf_tl[:examples_per_task]
-                )
-            counter = 0
-            with torch.no_grad():
-                for i, data in enumerate(dataset.train_loader):
-                    _, labels, not_aug_inputs = data
-                    not_aug_inputs = not_aug_inputs.to(self.device)
-                    if examples_per_task - counter > 0:
-                        self.buffer.add_data(examples=not_aug_inputs[:(examples_per_task - counter)],
-                                             labels=labels[:(examples_per_task - counter)],
-                                             task_labels=(torch.ones(self.args.batch_size) *
-                                                          self.task)[:(examples_per_task - counter)])
+                    self.buffer.add_data(examples=not_aug_inputs[:(examples_per_task - counter)],
+                                         labels=labels[:(examples_per_task - counter)],
+                                         task_labels=(torch.ones(self.args.batch_size) *
+                                                      (task - 1))[:(examples_per_task - counter)])
                     counter += len(not_aug_inputs)
                 
 
