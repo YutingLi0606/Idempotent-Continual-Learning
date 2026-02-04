@@ -4,22 +4,24 @@
 
 # 📝 Idempotent continual learning
 
+Official Repository for ICLR'26 Paper"Idempotent Experience Replay for Reliable Continual Learning"
 
 
 
-
+## 🎉 News
+- [x] **[2026.01.26]** Our paper has been accepted by ICLR 2026!
 ## Table of Content
 
-* [3. Installation](#3-installation)
+* [1. Installation](#1-installation)
 * [4. Quick Start](#4-quick-start)
 * [5. Citation](#5-citation)
 * [6. Acknowledgement](#6-acknowledgement)
 
 
 
-## 3. Installation
+## 1. Installation
 
-### 3.1. Environment
+### 1.1. Environment
 
 
 Our model can be learnt in a **single GPU RTX-4090 24G**
@@ -29,7 +31,7 @@ conda env create -f environment.yaml
 conda activate icl
 ```
 
-The code was tested on Python 3.9 and PyTorch 1.13.0.
+The code was tested on Python 3.10 and PyTorch 1.13.0.
 
 
 ### 3.2. Datasets
