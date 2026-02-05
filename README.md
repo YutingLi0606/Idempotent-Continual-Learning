@@ -43,7 +43,7 @@ bash run_para.sh
 ```
 
 ## 2. Reproduced Results
-After the paper has been accepted, we rerun everything to provide complete logs and checkpoints for our Table 1 in the paper. The example results are ResNet18 on S-CIFAR-100 using ER and ER+ID as baseline methods with 500 buffers and 0-5 seeds.
+After the paper has been accepted, we rerun everything to provide complete logs and checkpoints for our Table 1 in the paper. The example results are ResNet18 on S-CIFAR-100 using ER and ER+ID as baseline methods with 500 buffers and 0-4 seeds.
 All results are stored in mlflow in thie repository. You can run mlflow ui server locally:
 ```bash
 mlflow ui
