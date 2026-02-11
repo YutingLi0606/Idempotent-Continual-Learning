@@ -2,7 +2,7 @@
 
 Official Repository for ICLR'26 Paper"Idempotent Experience Replay for Reliable Continual Learning"
 
-IDER is a novel framework for continual learning based on the idempotent property, mitigating catastrophic forgetting and making reliable predictions. It is a simple and robust method that can be easily integrated into other state-of-the-art approaches.
+IDER is a novel framework for continual learning based on the idempotent property, which mitigates catastrophic forgetting and improves prediction reliability. It is a simple and robust method that can be easily integrated into other state-of-the-art approaches.
 
 ## 🎉 News
 - [x] **[2026.01.26]** Our paper has been accepted by ICLR 2026!
