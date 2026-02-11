@@ -17,7 +17,7 @@ Official Repository for ICLR'26 Paper"Idempotent Experience Replay for Reliable 
 ### 1.1. Environment
 
 
-Our model can be learnt in a **single GPU RTX-4090 24G**
+
 Clone this repository and install the requirements. Our model can be learnt in a **single GPU RTX-4090 24G**
 
 ```bash
