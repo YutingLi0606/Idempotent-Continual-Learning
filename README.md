@@ -29,8 +29,9 @@ Zhanwang Liu<sup>1</sup>, Yuting Li<sup>1</sup>, Haoyuan Gao<sup>1</sup>, Yexin 
 
 * [1. Quick Start](#1-quick-start)
 * [2. Reproduced Results](#2-reproduced-results)
-* [3. Citation](#3-citation)
-* [4. Acknowledgement](#4-acknowledgement)
+* [3. Tools](#3-tools)
+* [4. Citation](#4-citation)
+* [5. Acknowledgement](#5-acknowledgement)
 
 
 ## 1. Quick Start
@@ -50,12 +51,27 @@ The code was tested on Python 3.10 and PyTorch 1.13.0.
 
 ### 1.2. Training
 
-Train ResNet18 on different datasets using ER and ER+ID with different buffers. Run the following command:
+Train and evaluate ResNet18 on different datasets using ER and ER+ID with different buffers. Run the following command:
 
+<details>
+<summary><b>CIFAR-10</b></summary>
+    
+```bash
+bash run_para_cifar10.sh
+``` 
+</details>
+<details> <summary><b>CIFAR-100</b></summary>
+    
 ```bash
 bash run_para_cifar100.sh
-
 ```
+</details>
+<details> <summary><b>TinyImageNet</b></summary>
+    
+```bash
+bash run_para_tinyimg.sh
+```
+</details>
 
 ## 2. Reproduced Results
 After the paper has been accepted, we rerun everything to provide complete logs and checkpoints for our Table 1 in the paper. The example results are ResNet18 on S-CIFAR-100 using ER and ER+ID as baseline methods with 500 buffers and 0-4 seeds.
@@ -69,7 +85,9 @@ Checkpoint
 
 The checkpoints are saved under experiments folder.
 
-## 3. Citation
+## 3. Tools
+
+## 4. Citation
 If our project is helpful for your research, please consider citing :
 ```
 
@@ -82,5 +100,5 @@ If our project is helpful for your research, please consider citing :
 ```
 
 
-## 4. Acknowledgement
+## 5. Acknowledgement
 This project is heavily based on [Mammoth](https://github.com/aimagelab/mammoth) and [weight-interpolation-cl](https://github.com/jedrzejkozal/weight-interpolation-cl). We sincerely appreciate the authors of the mentioned works for sharing such great library as open-source project.
