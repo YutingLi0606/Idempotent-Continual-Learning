@@ -1,9 +1,28 @@
-# 📝 Idempotent continual learning
 
-Official Repository for ICLR'26 Paper"Idempotent Experience Replay for Reliable Continual Learning"
+<div align="center">
+
+# Idempotent Experience Replay for Reliable Continual Learning
+
+<a href="ARXIV_LINK"><img src="https://img.shields.io/badge/arXiv-XXXX.XXXXX-b31b1b.svg" alt="arXiv"></a>
+<a href="PROJECT_PAGE_LINK"><img src="https://img.shields.io/badge/Project-Page-green.svg" alt="Project Page"></a>
+<a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License"></a>
 
 IDER is a novel framework for continual learning based on the idempotent property, which mitigates catastrophic forgetting and improves prediction reliability. It is a simple and robust method that can be easily integrated into other state-of-the-art approaches.
 
+<hr/>
+
+<p>
+Lai Wei<sup>1,2,3</sup>, Liangbo He<sup>2</sup>, Jun Lan<sup>2</sup>, Lingzhong Dong<sup>1,2</sup>, Yutong Cai<sup>1</sup>, Siyuan Li<sup>2</sup>, Huijia Zhu<sup>2</sup>, Weiqiang Wang<sup>2</sup>, Linghe Kong<sup>1</sup>, Yue Wang<sup>3</sup>, Zhuosheng Zhang<sup>1</sup>, Weiran Huang<sup>1,4</sup>
+</p>
+
+<p>
+<sup>1</sup> School of Computer Science, Shanghai Jiao Tong University<br/>
+<sup>2</sup> Ant Group<br/>
+<sup>3</sup> Zhongguancun Academy<br/>
+<sup>4</sup> Shanghai Innovation Institute
+</p>
+
+</div>
 ## 🎉 News
 - [x] **[2026.01.26]** Our paper has been accepted by ICLR 2026!
 ## Table of Content
