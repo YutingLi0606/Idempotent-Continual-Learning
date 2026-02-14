@@ -49,7 +49,8 @@ The code was tested on Python 3.10 and PyTorch 1.13.0.
 
 
 ### 1.2. Training
-Train ResNet18 on S-CIFAR-100 using ER and ER+ID as baseline methods with 500 buffers. Run the following command:
+
+Train ResNet18 on different datasets using ER and ER+ID with different buffers. Run the following command:
 
 ```bash
 bash run_para_cifar100.sh
