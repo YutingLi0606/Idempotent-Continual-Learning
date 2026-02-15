@@ -75,17 +75,24 @@ bash run_para_tinyimg.sh
 
 ## 2. Reproduced Results
 After the paper has been accepted, we rerun everything to provide complete logs and checkpoints for our Table 1 in the paper. The example results are ResNet18 on S-CIFAR-100 using ER and ER+ID as baseline methods with 500 buffers and 0-4 seeds.
-All results are stored in mlflow in thie repository. You can run mlflow ui server locally:
-```bash
-mlflow ui
-```
-And then go to http://127.0.0.1:5000/#/ in your brower to see all the results from the experiments we runned and exact hyperparameters used in each run.
+
 
 Checkpoint
 
 The checkpoints are saved under experiments folder.
 
 ## 3. Tools
+<details>
+<summary><b>mlflow visulization</b></summary>
+
+All results are stored in mlflow under the repository mlruns. You can run mlflow ui server locally:
+```bash
+mlflow ui
+```
+And then go to http://127.0.0.1:5000/#/ in your brower to see all the results from the experiments we runned and exact hyperparameters used in each run.
+
+</details>
+
 
 ## 4. Citation
 If our project is helpful for your research, please consider citing :
