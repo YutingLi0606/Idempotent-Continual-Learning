@@ -84,8 +84,14 @@ The checkpoints are saved under experiments folder.
 ## 3. Tools
 <details>
 <summary><b>mlflow visulization</b></summary>
+    
+1. Setup
+    
+```bash
+pip install mlflow
+```
 
-All results are stored in mlflow under the repository mlruns. You can run mlflow ui server locally:
+2. All results are stored in mlflow under the repository mlruns. You can run mlflow ui server locally:
 ```bash
 mlflow ui
 ```
