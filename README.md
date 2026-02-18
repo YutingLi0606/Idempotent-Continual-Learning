@@ -75,7 +75,7 @@ bash run_para_tinyimg.sh
 
 ## 2. Reproduced Results
 After the paper has been accepted, we rerun everything to provide complete logs and checkpoints for our Table 1 in the paper. The example results are ResNet18 on different datasets using ER and ER+ID as baseline methods with different buffers and 0-4 seeds.
-| **Dataset** | **Method** | **Forgetting (⬇️)** | **CIL (⬆️)** | **TIL (⬆️)** | **∆** |**Checkpoint** |
+| **Dataset** | **Method** | **Forgetting (⬇️)** | **TIL (⬆️)** | **CIL (⬆️)** | **∆** |**Checkpoint** |
 |---|---|---:|---:|---:|---:|---|
 | CIFAR-10 | ER | ... | ... | ... | ... | ... | 
 |  | ER+ID | ... | ... | ... | ... | ... | 
