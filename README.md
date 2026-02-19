@@ -81,11 +81,11 @@ After the paper has been accepted, we rerun everything to provide complete logs 
 |  |  | ER+ID | 16.89&nbsp;±&nbsp;2.26 | 95.87&nbsp;±&nbsp;0.36 | 70.68&nbsp;±&nbsp;1.10 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_200/erid_seed_0.pth) |
 |  | 500 | ER | 44.75&nbsp;±&nbsp;2.94 | 93.38&nbsp;±&nbsp;0.36 | 60.62&nbsp;±&nbsp;2.46 | - |
 |  |  | ER+ID | 11.59&nbsp;±&nbsp;2.13 | 96.20&nbsp;±&nbsp;0.40 | 75.52&nbsp;±&nbsp;1.35 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_500/erid_seed_0.pth) |
-| CIFAR-100 | 500 | ER | 73.81&nbsp;±&nbsp;0.42 | 73.98&nbsp;±&nbsp;1.15 | 21.28&nbsp;±&nbsp;1.08 | - |
+| CIFAR‑100 | 500 | ER | 73.81&nbsp;±&nbsp;0.42 | 73.98&nbsp;±&nbsp;1.15 | 21.28&nbsp;±&nbsp;1.08 | - |
 |  |  | ER+ID | 32.27&nbsp;±&nbsp;1.96 | 83.30&nbsp;±&nbsp;0.41 | 45.21&nbsp;±&nbsp;1.20 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar100/buffer_500/erid_seed_0.pth) |
 |  | 2000 | ER | 54.52&nbsp;±&nbsp;0.62 | 81.62&nbsp;±&nbsp;0.95 | 37.93&nbsp;±&nbsp;0.76 | - |
 |  |  | ER+ID | 18.76&nbsp;±&nbsp;1.52 | 86.54&nbsp;±&nbsp;0.34 | 56.30&nbsp;±&nbsp;0.50 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar100/buffer_2000/erid_seed_0.pth) |
-| Tiny-ImageNet | 4000 | ER | 56.89&nbsp;±&nbsp;0.74 | 66.68&nbsp;±&nbsp;0.47 | 25.20&nbsp;±&nbsp;0.70 | - |
+| Tiny‑ImageNet | 4000 | ER | 56.89&nbsp;±&nbsp;0.74 | 66.68&nbsp;±&nbsp;0.47 | 25.20&nbsp;±&nbsp;0.70 | - |
 |  |  | ER+ID | 21.62&nbsp;±&nbsp;1.67 | 74.56&nbsp;±&nbsp;0.55 | 43.25&nbsp;±&nbsp;1.26 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-tinyimg/buffer_4000/erid_seed_0.pth) |
 
 
