@@ -77,16 +77,16 @@ bash run_para_tinyimg.sh
 After the paper has been accepted, we rerun everything to provide complete logs and checkpoints for our Table 1 in the paper. The example results are ResNet18 on different datasets using ER and ER+ID as baseline methods with different buffers and 0-4 seeds.
 | **Dataset** | **Buffer** | **Method** | **Forgetting(⬇️)** | **TIL(⬆️)** | **CIL(⬆️)** | **Checkpoint** |
 |---|---:|---|---:|---:|---:|---|
-| CIFAR-10 | 200 | ER | 59.71 ± 2.62 | 91.48 ± 0.93 | 48.89 ± 2.19 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_200/erid_seed_0.pth) |
-|  |  | ER+ID | 16.89 ± 2.26 | 95.87 ± 0.36 | 70.68 ± 1.10 | ... |
-|  | 500 | ER | 44.75 ± 2.94  | 93.38 ± 0.36 | 60.62 ± 2.46 | ... |
-|  |  | ER+ID | 11.59 ± 2.13 | 96.20 ± 0.40 | 75.52 ± 1.35 | ... |
-| CIFAR-100 | 500 | ER | 73.81 ± 0.42  | 73.98 ± 1.15 | 21.28 ± 1.08 | ... |
-|  |  | ER+ID | 32.27 ± 1.96 | 83.30 ± 0.41 | 45.21 ± 1.20 | ... |
-|  | 2000 | ER | 54.52 ± 0.62 | 81.62 ± 0.95 | 37.93 ± 0.76 | ... |
-|  |  | ER+ID | 18.76 ± 1.52 | 86.54 ± 0.34  | 56.30 ± 0.50  | ... |
-| Tiny-ImageNet | 4000 | ER | 56.89 ± 0.74 | 66.68 ± 0.47 | 25.20 ± 0.70 | ... |
-|  |  | ER+ID | 21.62 ± 1.67 | 74.56 ± 0.55 | 43.25 ± 1.26 | ... |
+| CIFAR-10 | 200 | ER | 59.71 ± 2.62 | 91.48 ± 0.93 | 48.89 ± 2.19 | - |
+|  |  | ER+ID | 16.89 ± 2.26 | 95.87 ± 0.36 | 70.68 ± 1.10 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_200/erid_seed_0.pth) |
+|  | 500 | ER | 44.75 ± 2.94  | 93.38 ± 0.36 | 60.62 ± 2.46 | - |
+|  |  | ER+ID | 11.59 ± 2.13 | 96.20 ± 0.40 | 75.52 ± 1.35 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_500/erid_seed_0.pth) |
+| CIFAR-100 | 500 | ER | 73.81 ± 0.42  | 73.98 ± 1.15 | 21.28 ± 1.08 | - |
+|  |  | ER+ID | 32.27 ± 1.96 | 83.30 ± 0.41 | 45.21 ± 1.20 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar100/buffer_500/erid_seed_0.pth) |
+|  | 2000 | ER | 54.52 ± 0.62 | 81.62 ± 0.95 | 37.93 ± 0.76 | - |
+|  |  | ER+ID | 18.76 ± 1.52 | 86.54 ± 0.34  | 56.30 ± 0.50  | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar100/buffer_2000/erid_seed_0.pth) |
+| Tiny-ImageNet | 4000 | ER | 56.89 ± 0.74 | 66.68 ± 0.47 | 25.20 ± 0.70 | - |
+|  |  | ER+ID | 21.62 ± 1.67 | 74.56 ± 0.55 | 43.25 ± 1.26 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-tinyimg/buffer_4000/erid_seed_0.pth) |
 
 
 
