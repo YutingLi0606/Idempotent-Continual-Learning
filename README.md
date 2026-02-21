@@ -6,13 +6,20 @@
 <a href="ARXIV_LINK"><img src="https://img.shields.io/badge/arXiv-XXXX.XXXXX-b31b1b.svg" alt="arXiv"></a>
 <a href="PROJECT_PAGE_LINK"><img src="https://img.shields.io/badge/Project-Page-green.svg" alt="Project Page"></a>
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License"></a>
+<a href="mailto:CONTACT_EMAIL"><img src="https://img.shields.io/badge/Contact-Email-lightgrey.svg" alt="Contact Email"></a>
 
 IDER is a novel framework for continual learning based on the idempotent property, which mitigates catastrophic forgetting and improves prediction reliability. It is a simple and robust method that can be easily integrated into other state-of-the-art approaches.
 
 <hr/>
 
 <p>
-Zhanwang Liu<sup>1</sup>, Yuting Li<sup>1</sup>, Haoyuan Gao<sup>1</sup>, Yexin Li<sup>4</sup>, Linghe Kong<sup>1</sup>, Lichao Sun<sup>3</sup>, Weiran Huang<sup>1,2,4</sup>
+Zhanwang Liu<sup>1</sup><sup>†</sup>,
+Yuting Li<sup>1</sup><sup>†</sup>,
+Haoyuan Gao<sup>1</sup>,
+Yexin Li<sup>4</sup>,
+Linghe Kong<sup>1</sup>,
+Lichao Sun<sup>3</sup>,
+Weiran Huang<sup>1,2,4</sup><sup>*</sup>
 </p>
 
 <p>
@@ -21,6 +28,13 @@ Zhanwang Liu<sup>1</sup>, Yuting Li<sup>1</sup>, Haoyuan Gao<sup>1</sup>, Yexin 
 <sup>3</sup> Lehigh University<br/>
 <sup>4</sup> State Key Laboratory of General Artificial Intelligence, BIGAI
 </p>
+
+<p>
+<sup>†</sup> Equal contribution.&nbsp;&nbsp;
+<sup>*</sup> Corresponding author.
+</p>
+
+
 </div>
 
 ## 🎉 News
@@ -81,11 +95,11 @@ After the paper has been accepted, we rerun everything to provide complete logs 
 |  |  | ER+ID | 16.89&nbsp;±&nbsp;2.26 | 95.87&nbsp;±&nbsp;0.36 | 70.68&nbsp;±&nbsp;1.10 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_200/erid_seed_0.pth) |
 |  | 500 | ER | 44.75&nbsp;±&nbsp;2.94 | 93.38&nbsp;±&nbsp;0.36 | 60.62&nbsp;±&nbsp;2.46 | - |
 |  |  | ER+ID | 11.59&nbsp;±&nbsp;2.13 | 96.20&nbsp;±&nbsp;0.40 | 75.52&nbsp;±&nbsp;1.35 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_500/erid_seed_0.pth) |
-| CIFAR-100 | 500 | ER | 73.81&nbsp;±&nbsp;0.42 | 73.98&nbsp;±&nbsp;1.15 | 21.28&nbsp;±&nbsp;1.08 | - |
+| CIFAR‑100 | 500 | ER | 73.81&nbsp;±&nbsp;0.42 | 73.98&nbsp;±&nbsp;1.15 | 21.28&nbsp;±&nbsp;1.08 | - |
 |  |  | ER+ID | 32.27&nbsp;±&nbsp;1.96 | 83.30&nbsp;±&nbsp;0.41 | 45.21&nbsp;±&nbsp;1.20 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar100/buffer_500/erid_seed_0.pth) |
 |  | 2000 | ER | 54.52&nbsp;±&nbsp;0.62 | 81.62&nbsp;±&nbsp;0.95 | 37.93&nbsp;±&nbsp;0.76 | - |
 |  |  | ER+ID | 18.76&nbsp;±&nbsp;1.52 | 86.54&nbsp;±&nbsp;0.34 | 56.30&nbsp;±&nbsp;0.50 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar100/buffer_2000/erid_seed_0.pth) |
-| Tiny-ImageNet | 4000 | ER | 56.89&nbsp;±&nbsp;0.74 | 66.68&nbsp;±&nbsp;0.47 | 25.20&nbsp;±&nbsp;0.70 | - |
+| Tiny‑ImageNet | 4000 | ER | 56.89&nbsp;±&nbsp;0.74 | 66.68&nbsp;±&nbsp;0.47 | 25.20&nbsp;±&nbsp;0.70 | - |
 |  |  | ER+ID | 21.62&nbsp;±&nbsp;1.67 | 74.56&nbsp;±&nbsp;0.55 | 43.25&nbsp;±&nbsp;1.26 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-tinyimg/buffer_4000/erid_seed_0.pth) |
 
 
