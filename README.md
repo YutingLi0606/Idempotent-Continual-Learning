@@ -4,9 +4,9 @@
 # Idempotent Experience Replay for Reliable Continual Learning
 
 <a href="ARXIV_LINK"><img src="https://img.shields.io/badge/arXiv-XXXX.XXXXX-b31b1b.svg" alt="arXiv"></a>
-<!--<a href="PROJECT_PAGE_LINK"><img src="https://img.shields.io/badge/Project-Page-green.svg" alt="Project Page"></a>-->
 <a href="LICENSE"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License"></a>
 <a href="mailto:zhanwnagliu@gmail.com"><img src="https://img.shields.io/badge/Contact-Email-lightgrey.svg" alt="Contact Email"></a>
+<!--<a href="PROJECT_PAGE_LINK"><img src="https://img.shields.io/badge/Project-Page-green.svg" alt="Project Page"></a>-->
 
 IDER is a novel framework for continual learning based on the idempotent property, which mitigates catastrophic forgetting and improves prediction reliability. It is a simple and robust method that can be easily integrated into other state-of-the-art approaches.
 
