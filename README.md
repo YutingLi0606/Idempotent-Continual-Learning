@@ -36,7 +36,7 @@ Weiran Huang<sup>1,2,4</sup><sup>*</sup>
 
 <br/>
 
-<img src="https://github.com/YutingLi0606/Idempotent-Continual-Learning/blob/main/img/method.jpg" alt="Method overview" width="800"/>
+<img src="https://github.com/YutingLi0606/Idempotent-Continual-Learning/blob/main/img/method.jpg" alt="Method overview" width="600"/>
 
 </div>
 
