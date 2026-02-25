@@ -88,7 +88,7 @@ bash run_para_tinyimg.sh
 </details>
 
 ## 2. Reproduced Results
-After the paper has been accepted, we rerun everything to provide complete logs and checkpoints for our Table 1 in the paper. The example results are ResNet18 on different datasets using ER and ER+ID as baseline methods with different buffers and 0-4 seeds.
+After the paper has been accepted, we rerun everything to provide complete logs and checkpoints for our Table 1 in the paper. The example results are ResNet18 on different datasets using ER and ER+ID as baseline methods with different buffers and 0-4 seeds. All results reported here were obtained by running experiments on an NVIDIA GeForce RTX 4090.
 | **Dataset** | **Buffer** | **Method** | **Forgetting(⬇️)** | **TIL(⬆️)** | **CIL(⬆️)** | **Checkpoint** |
 |---|---:|---|---:|---:|---:|---|
 | CIFAR-10 | 200 | ER | 59.71&nbsp;±&nbsp;2.62 | 91.48&nbsp;±&nbsp;0.93 | 48.89&nbsp;±&nbsp;2.19 | - |
@@ -102,7 +102,17 @@ After the paper has been accepted, we rerun everything to provide complete logs 
 | Tiny‑ImageNet | 4000 | ER | 56.89&nbsp;±&nbsp;0.74 | 66.68&nbsp;±&nbsp;0.47 | 25.20&nbsp;±&nbsp;0.70 | - |
 |  |  | ER+ID | 21.62&nbsp;±&nbsp;1.67 | 74.56&nbsp;±&nbsp;0.55 | 43.25&nbsp;±&nbsp;1.26 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-tinyimg/buffer_4000/erid_seed_0.pth) |
 
-
+The results below were obtained using an Ascend 910B.
+<details> <summary><b>ASCEND</b></summary>
+    
+| **Dataset** | **Buffer** | **Method** | **Forgetting(⬇️)** | **TIL(⬆️)** | **CIL(⬆️)** | **Checkpoint** |
+|---|---:|---|---:|---:|---:|---|
+| CIFAR-10 | 200 | ER+ID | 16.57&nbsp;±&nbsp;3.29 | 95.73&nbsp;±&nbsp;0.30 | 70.85&nbsp;±&nbsp;0.81 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_200/erid_seed_0.pth) |
+|  | 500 | ER+ID | 12.02&nbsp;±&nbsp;1.39 | 96.07&nbsp;±&nbsp;0.19 | 75.06&nbsp;±&nbsp;0.95 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_500/erid_seed_0.pth) |
+| CIFAR‑100 | 500 | ER+ID | 31.85&nbsp;±&nbsp;3.50 | 83.45&nbsp;±&nbsp;0.37 | 45.55&nbsp;±&nbsp;0.66 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar100/buffer_500/erid_seed_0.pth) |
+|  | 2000 | ER+ID | 18.99&nbsp;±&nbsp;1.09 | 86.79&nbsp;±&nbsp;0.30 | 56.15&nbsp;±&nbsp;0.31 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar100/buffer_2000/erid_seed_0.pth) |
+| Tiny‑ImageNet | 4000 | ER+ID | 20.73&nbsp;±&nbsp;0.72 | 74.30&nbsp;±&nbsp;0.97 | 43.15&nbsp;±&nbsp;1.20 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-tinyimg/buffer_4000/erid_seed_0.pth) |
+</details>
 
 Checkpoint
 
