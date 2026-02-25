@@ -34,6 +34,9 @@ Weiran Huang<sup>1,2,4</sup><sup>*</sup>
 <sup>*</sup> Corresponding author.
 </p>
 
+<br/>
+
+<img src="https://raw.githubusercontent.com/YutingLi0606/Idempotent-Continual-Learning/main/img/method.jpg" alt="Method overview" width="900"/>
 
 </div>
 
