@@ -91,7 +91,7 @@ bash run_para_tinyimg.sh
 </details>
 
 ## 2. Reproduced Results
-After the paper has been accepted, we rerun everything to provide complete logs and checkpoints for our Table 1 in the paper. The example results are ResNet18 on different datasets using ER and ER+ID as baseline methods with different buffers and 0-4 seeds. All results reported here were obtained by running experiments on an NVIDIA GeForce RTX 4090.
+The example results are ResNet18 on different datasets using ER and ER+ID as baseline methods with different buffers and 0-4 seeds. All results reported here were obtained by running experiments on an NVIDIA GeForce RTX 4090.
 | **Dataset** | **Buffer** | **Method** | **Forgetting(⬇️)** | **TIL(⬆️)** | **CIL(⬆️)** | **Checkpoint** |
 |---|---:|---|---:|---:|---:|---|
 | CIFAR-10 | 200 | ER | 59.71&nbsp;±&nbsp;2.62 | 91.48&nbsp;±&nbsp;0.93 | 48.89&nbsp;±&nbsp;2.19 | - |
