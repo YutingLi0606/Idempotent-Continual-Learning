@@ -19,7 +19,7 @@ Haoyuan Gao<sup>1</sup>,
 Yexin Li<sup>4</sup>,
 Linghe Kong<sup>1</sup>,
 Lichao Sun<sup>3</sup>,
-Weiran Huang<sup>1,2,4</sup><sup>†</sup>
+Weiran Huang<sup>1,2</sup><sup>†</sup>
 </p>
 
 <p>
