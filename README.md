@@ -25,6 +25,9 @@ Weiran Huang<sup>1,2</sup><sup>†</sup>
 <p>
 <sup>1</sup> School of Computer Science, Shanghai Jiao Tong University<br/>
 <sup>2</sup> Shanghai Innovation Institute<br/>
+</p>
+
+<p>
 <sup>3</sup> Lehigh University<br/>
 <sup>4</sup> State Key Laboratory of General Artificial Intelligence, BIGAI
 </p>
