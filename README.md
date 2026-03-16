@@ -148,8 +148,8 @@ If our project is helpful for your research, please consider citing :
 ```
 @article{liu2026ider,
   title={IDER: IDempotent Experience Replay for Reliable Continual Learning},
-  author={Zhanwang Liu and Yuting Li and Haoyuan Gao and Yexin Li and Linghe Kong and Lichao Sun and Weiran Huang},
-  journal={arXiv preprint arXiv：2603.00624},
+  author={Liu, Zhanwang and Li, Yuting and Gao, Haoyuan and Li, Yexin and Kong, Linghe and Sun, Lichao and Huang, Weiran},
+  journal={arXiv preprint arXiv:2603.00624},
   year={2026}
 }
 ```
