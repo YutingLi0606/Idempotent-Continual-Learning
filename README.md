@@ -156,6 +156,8 @@ If our project is helpful for your research, please consider citing :
 
 
 ## 5. Acknowledgement
+Supported by Shanghai Foundation Model Infrastructure Project 2025SHZDZX025G03.
+
 This project is heavily based on [Mammoth](https://github.com/aimagelab/mammoth) and [weight-interpolation-cl](https://github.com/jedrzejkozal/weight-interpolation-cl). We sincerely appreciate the authors of the mentioned works for sharing such great library as open-source project.
 
 ✨ Feel free to contribute and reach out if you have any questions! ✨  
