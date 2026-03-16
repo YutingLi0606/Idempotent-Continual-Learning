@@ -156,7 +156,7 @@ If our project is helpful for your research, please consider citing :
 
 
 ## 5. Acknowledgement
-Supported by Shanghai Foundation Model Infrastructure Project 2025SHZDZX025G03.
+Supported by the Shanghai Municipal Special Program for Basic Research on General AI Foundation Models (Grant No. 2025SHZDZX025G03) and the SJTU Kunpeng \& Ascend Center of Excellence.
 
 This project is heavily based on [Mammoth](https://github.com/aimagelab/mammoth) and [weight-interpolation-cl](https://github.com/jedrzejkozal/weight-interpolation-cl). We sincerely appreciate the authors of the mentioned works for sharing such great library as open-source project.
 
