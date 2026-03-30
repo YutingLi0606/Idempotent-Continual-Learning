@@ -109,8 +109,19 @@ The example results are ResNet18 on different datasets using ER and ER+ID as bas
 |  |  | ER+ID | 21.62&nbsp;±&nbsp;1.67 | 74.56&nbsp;±&nbsp;0.55 | 43.25&nbsp;±&nbsp;1.26 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-tinyimg/buffer_4000/erid_seed_0.pth) |
 
 The results below were obtained using an Ascend 910B.
+To reproduce the experiments on **Ascend NPUs**, navigate to the `ASCEND` directory and run the corresponding shell scripts.
+
+Before training, please ensure that the NPU-related dependencies are properly configured and that the Ascend environment is initialized with:
+
+```bash
+source /usr/local/Ascend/cann-8.5.0/set_env.sh
+export ASCEND_HOME_PATH=/usr/local/Ascend/cann-8.5.0
+export ASCEND_OPP_PATH=/usr/local/Ascend/cann-8.5.0/opp
+```
+
 <details> <summary><b>ASCEND</b></summary>
-    
+
+
 | **Dataset** | **Buffer** | **Method** | **Forgetting(⬇️)** | **TIL(⬆️)** | **CIL(⬆️)** | **Checkpoint** |
 |---|---:|---|---:|---:|---:|---|
 | CIFAR-10 | 200 | ER+ID | 16.57&nbsp;±&nbsp;3.29 | 95.73&nbsp;±&nbsp;0.30 | 70.85&nbsp;±&nbsp;0.81 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_200/erid_seed_0.pth) |
