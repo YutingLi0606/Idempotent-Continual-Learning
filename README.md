@@ -125,11 +125,11 @@ export ASCEND_OPP_PATH=/usr/local/Ascend/cann-8.5.0/opp
 
 | **Dataset** | **Buffer** | **Method** | **Forgetting(⬇️)** | **TIL(⬆️)** | **CIL(⬆️)** | **Checkpoint** |
 |---|---:|---|---:|---:|---:|---|
-| CIFAR-10 | 200 | ER+ID | 16.57&nbsp;±&nbsp;3.29 | 95.73&nbsp;±&nbsp;0.30 | 70.85&nbsp;±&nbsp;0.81 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_200/erid_seed_0.pth) |
-|  | 500 | ER+ID | 12.02&nbsp;±&nbsp;1.39 | 96.07&nbsp;±&nbsp;0.19 | 75.06&nbsp;±&nbsp;0.95 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar10/buffer_500/erid_seed_0.pth) |
-| CIFAR‑100 | 500 | ER+ID | 31.85&nbsp;±&nbsp;3.50 | 83.45&nbsp;±&nbsp;0.37 | 45.55&nbsp;±&nbsp;0.66 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar100/buffer_500/erid_seed_0.pth) |
-|  | 2000 | ER+ID | 18.99&nbsp;±&nbsp;1.09 | 86.79&nbsp;±&nbsp;0.30 | 56.15&nbsp;±&nbsp;0.31 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-cifar100/buffer_2000/erid_seed_0.pth) |
-| Tiny‑ImageNet | 4000 | ER+ID | 20.73&nbsp;±&nbsp;0.72 | 74.30&nbsp;±&nbsp;0.97 | 43.15&nbsp;±&nbsp;1.20 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/tree/main/experiments/seq-tinyimg/buffer_4000/erid_seed_0.pth) |
+| CIFAR-10 | 200 | ER+ID | 16.57&nbsp;±&nbsp;3.29 | 95.73&nbsp;±&nbsp;0.30 | 70.85&nbsp;±&nbsp;0.81 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/blob/main/ASCEND/experiments/seq-cifar10/buffer_200/erid_seed_0.pth) |
+|  | 500 | ER+ID | 12.02&nbsp;±&nbsp;1.39 | 96.07&nbsp;±&nbsp;0.19 | 75.06&nbsp;±&nbsp;0.95 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/blob/main/ASCEND/experiments/seq-cifar10/buffer_500/erid_seed_0.pth) |
+| CIFAR‑100 | 500 | ER+ID | 31.85&nbsp;±&nbsp;3.50 | 83.45&nbsp;±&nbsp;0.37 | 45.55&nbsp;±&nbsp;0.66 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/blob/main/ASCEND/experiments/seq-cifar100/buffer_500/erid_seed_0.pth) |
+|  | 2000 | ER+ID | 18.99&nbsp;±&nbsp;1.09 | 86.79&nbsp;±&nbsp;0.30 | 56.15&nbsp;±&nbsp;0.31 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/blob/main/ASCEND/experiments/seq-cifar100/buffer_2000/erid_seed_0.pth) |
+| Tiny‑ImageNet | 4000 | ER+ID | 20.73&nbsp;±&nbsp;0.72 | 74.30&nbsp;±&nbsp;0.97 | 43.15&nbsp;±&nbsp;1.20 | [pth](https://github.com/YutingLi0606/Idempotent-Continual-Learning/blob/main/ASCEND/experiments/seq-tinyimg/buffer_4000/erid_seed_0.pth) |
 </details>
 
 
